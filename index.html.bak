@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeRealms RCET</title>
+    <link rel="stylesheet" href="styles/styles.css"
+</head>
+<body>
+    <div class="question--data">
+        <div class="title">
+            <h1 class="question">Lorem Ipsum Dorem Sit</h1>
+        </div>
+        <div class="question--text">
+            <p class="question">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure saepe doloremque magnam similique laboriosam mollitia sint quisquam enim incidunt, facere odit consequatur doloribus nisi consectetur delectus quibusdam corrupti exercitationem! Minus.</p>
+        </div>
+        <div class="testcases">
+            <h2>Test Cases</h2>
+            <div class="dotted-line"></div>
+            <ul class="no-bullet">
+                <li>
+                    <h3>&diams;Test Case 1</h3>
+                    <p><strong>Input:</strong> 5</p>
+                    <p><strong>Expected Output:</strong> 25</p>
+                </li>
+                <li>
+                    <h3>&diams;Test Case 2</h3>
+                    <p><strong>Input:</strong> 10</p>
+                    <p><strong>Expected Output:</strong> 100</p>
+                </li>
+                <li>
+                    <h3>&diams;Test Case 3</h3>
+                    <p><strong>Input:</strong> -3</p>
+                    <p><strong>Expected Output:</strong> 9</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="editor">
+        <div class="editor__wrapper">
+            <div class="editor__body">
+                <div id="codeEditorWindow" class="editor__code"></div>
+            </div>
+            <div class="editor__footer">
+                <div class="editor__footer--left">
+                    <button class="editor__btn editor__run">RUN</button>
+                    <button class="editor__btn editor__submit">SUBMIT</button>
+                </div>
+                <div class="editor__footer--right">
+                    <div class="editor__console"></div>
+                    <ul class="editor__console-logs"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="scripts/ace-builds-master/src-min/ace.js"></script>
+    <script class="languages" src="scripts/ace-builds-master/src-min/mode-c_cpp.js"></script>
+    <script src="scripts/ace-builds-master/src-min/ext-language_tools.js"></script>
+    <script src="scripts/scripts.js"></script>
+</body>
+</html>
