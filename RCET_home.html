@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CodeRealms RCET</title>
+    <link rel="stylesheet" href="/RCET_styles/RCET_styles.css"
+  </head>
+  <body>
+    <!-- This div represents the Question section, it has 2 segments -->
+    <div class="question--data">
+      <div class="question-env">
+        <h1 class="question">L1642. Furthest Building You Can Reach</h1>
+      </div>
+      <!-- This part is the Question text data -->
+      <div class="question--text">
+        <p class="question">
+          You are given an integer array heights representing the heights of
+          buildings, some bricks, and some ladders.<br /><br />
+          You start your journey from building 0 and move to the next building
+          by possibly using bricks or ladders.<br /><br />
+          While moving from building i to building i+1 (0-indexed),<br /><br />
+          If the current building's height is greater than or equal to the next
+          building's height, you do not need a ladder or bricks.<br /><br />
+          If the current building's height is less than the next building's
+          height, you can either use one ladder or (h[i+1] - h[i]) bricks.<br /><br />
+          Return the furthest building index (0-indexed) you can reach if you
+          use the given ladders and bricks optimally.
+        </p>
+      </div>
+      <!-- This part gives Details about the Test Cases  -->
+      <div class="testcases">
+        <h2>Test Cases</h2>
+        <div class="dotted-line"></div>
+        <ul class="no-bullet">
+          <li>
+            <h3>&diams; Test Case 1</h3>
+            <p><strong>Input:</strong> 5</p>
+            <p><strong>Expected Output:</strong> 25</p>
+          </li>
+          <li>
+            <h3>&diams; Test Case 2</h3>
+            <p><strong>Input:</strong> 10</p>
+            <p><strong>Expected Output:</strong> 100</p>
+          </li>
+          <li>
+            <h3>&diams; Test Case 3</h3>
+            <p><strong>Input:</strong> -3</p>
+            <p><strong>Expected Output:</strong> 9</p>
+          </li>
+          <li>
+            <h3>&diams; Test Case 4</h3>
+            <p><strong>Input:</strong> -67</p>
+            <p><strong>Expected Output:</strong> 93</p>
+          </li>
+          <li>
+            <h3>&diams; Test Case 5</h3>
+            <p><strong>Input:</strong> 3</p>
+            <p><strong>Expected Output:</strong> 96</p>
+          </li>
+        </ul>
+        <p>------------------------------EOF------------------------------</p>
+      </div>
+    </div>
+    <!-- This Div is where the RCET Engine is housed, outer div is a decoration -->
+    <div class="card">
+      <div class="cardHeader">
+        <div class="cardTitle">$Code-Realms</div>
+
+        <div class="cardControls">
+          <div class="Control redControl"></div>
+          <div class="Control yellowControl"></div>
+          <div class="Control greenControl"></div>
+        </div>
+      </div>
+      <!-- This div holds the primary editor block -->
+      <div class="editor">
+        <div class="editor__wrapper">
+            <!-- This is the IDE Block -->
+          <div class="editor__body">
+            <div id="codeEditorWindow" class="editor__code"></div>
+          </div>
+          <!-- This houses the footer block -->
+          <div class="editor__footer">
+            <div class="editor__footer--left">
+              <button class="editor__btn editor__run">RUN</button>
+              <button class="editor__btn editor__submit">SUBMIT</button>
+            </div>
+            <div class="editor__footer--right">
+              <div class="editor__console"></div>
+              <ul class="editor__console-logs"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ACE_EDITOR essential scripts -->
+    <script src="/RCET_scripts/ace-builds-master/src-min/ace.js"></script>
+    <script
+      class="languages"
+      src="RCET_scripts/ace-builds-master/src-min/mode-c_cpp.js"
+    ></script>
+    <script src="RCET_scripts/ace-builds-master/src-min/ext-language_tools.js"></script>
+    <!-- Custom scripts are housed below -->
+    <script src="RCET_scripts/RCET_scripts.js"></script>
+  </body>
+</html>

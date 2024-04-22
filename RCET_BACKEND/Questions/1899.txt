@@ -1,0 +1,27 @@
+Alex is participating in the filming of another video of BrMeast, and BrMeast asked Alex to prepare 250 thousand tons of TNT, but Alex didn't hear him well, so he prepared n
+ boxes and arranged them in a row waiting for trucks. The i
+-th box from the left weighs ai
+ tons.
+
+All trucks that Alex is going to use hold the same number of boxes, denoted by k
+. Loading happens the following way:
+
+The first k
+ boxes goes to the first truck,
+The second k
+ boxes goes to the second truck,
+⋯
+The last k
+ boxes goes to the nk
+-th truck.
+Upon loading is completed, each truck must have exactly k
+ boxes. In other words, if at some point it is not possible to load exactly k
+ boxes into the truck, then the loading option with that k
+ is not possible.
+
+Alex hates justice, so he wants the maximum absolute difference between the total weights of two trucks to be as great as possible. If there is only one truck, this value is 0
+.
+
+Alex has quite a lot of connections, so for every 1≤k≤n
+, he can find a company such that each of its trucks can hold exactly k
+ boxes. Print the maximum absolute difference between the total weights of any two trucks.
