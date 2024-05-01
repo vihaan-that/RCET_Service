@@ -221,14 +221,15 @@ app.post("/upload", async (req, res) => {
   userCode = Val;
   const myHeaders = new Headers();
   let CheckedFlag = true;
+  let updatedData;
   try {
     //const question = await Questions.findOne({ QuestionId: 189});
 
  // const question = await Questions.findOne({id:'660dc17cf8ba68be2e25373e'}); // why are you using a static id ?
     // fetching dynamic question
-    const question = await Questions.findOne({ QuestionId: questionId });
+    const question = await Questions.findOne({ QuestionId: questionID });
   const submission = await Submissions.find(
-    { QuestionID: questionId, UserID: userID },
+    { QuestionID: questionID, UserID: userID },
     {}
   );
 
@@ -237,10 +238,10 @@ app.post("/upload", async (req, res) => {
   }
 
   console.log(question);
-  console.log(questionId);
+  console.log(questionID);
 
   // Create a copy of the sample data object and update its fields with fetched details
-  let updatedData;
+  
 
   if (!submission) {
       CheckedFlag = false;
@@ -334,11 +335,14 @@ app.post("/upload", async (req, res) => {
 
       if (result.compile.code !== 1) {
         if (result.stdout === outputArray[i]) resultArray.push("YES");
+        
         else resultArray.push("NO");
       } else {
          compStatus = "FAILED";
         resultArray.push("NO");
       }
+      console.log(toString(result.stdout));
+        console.log(toString(outputArray[i]));
     } catch (error) {
       console.error(error);
     }
