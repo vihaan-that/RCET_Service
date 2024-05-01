@@ -1,13 +1,15 @@
 
-
+function refreshPage(){
+  location.reload();
+}
 const executeCodeBtn = document.querySelector('.editor__run');
 const submitCodeBtn = document.querySelector('.editor__submit');
 //Editor Initialising 
 let codeEditor = ace.edit(codeEditorWindow);
-userData = {
-  "username": "exampleUser",
-  "time": "2024-04-11T10:00:00Z",
-  "questionID": "12345"
+let userData = {
+  contestID:"",
+  userID:"",
+  questionID:"",
 }
 
 
@@ -45,7 +47,19 @@ executeCodeBtn.addEventListener('click', async () => {
 }
 const escapedString = escapeString(userCode);
 console.log('Escaped string:', escapedString);
-const codeJson = {"code":userCode, "questionID":"1", "userID":"0"};
+let url = window.location.href;
+url = (new URL(url)).pathname.split('/');
+userData.contestID = url[4];
+userData.userID = url[3];
+userData.questionID = url[2];
+console.log("URL DATA:\n");
+console.log(userData);
+console.log("User Code:\n");
+console.log(userCode);
+
+
+
+const codeJson = {"code":userCode, "questionID":userData.questionID, "userID":userData.userID};
 console.log(codeJson);
 const myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
@@ -60,6 +74,7 @@ fetch("http://localhost:3000/upload", requestOptions)
   .then((response) => response.text())
   .then((result) => document.getElementById('editorConsole').innerHTML = result)
   .then((result) => console.log(result))
+  .then((result) => {refreshPage()})
   .catch((error) => console.error(error));
 
 }
