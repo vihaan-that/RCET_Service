@@ -31,9 +31,9 @@ const questionSchema = new mongoose.Schema({
   QuestionTestInput01: String,
   QuestionTestInput02: String,
   QuestionTestInput03: String,
-  QuestionTestOuput01: String,
-  QuestionTestOuput02: String,
-  QuestionTestOuput03: String,
+  QuestionTestOutput01: String,
+  QuestionTestOutput02: String,
+  QuestionTestOutput03: String,
   QuestionTitle: String,
   runMemoryLimit: String,
   runTimeout: Number,
@@ -166,11 +166,11 @@ app.get("/RCET/practice/:questionID/:userID/:contestID", async (req, res) => {
       inputFormat: question.QuestionInputFormat,
       outputFormat: question.QuestionOutputFormat,
       testInput01: question.QuestionTestInput01,
-      testOutput01: question.QuestionTestOuput01,
+      testOutput01: question.QuestionTestOutput01,
       testInput02: question.QuestionTestInput02,
-      testOutput02: question.QuestionTestOuput02,
+      testOutput02: question.QuestionTestOutput02,
       testInput03: question.QuestionTestInput03,
-      testOutput03: question.QuestionTestOuput03,
+      testOutput03: question.QuestionTestOutput03,
       status: submission.Status,
       status01: submission.Status01,
       status02: submission.Status02,
@@ -269,11 +269,11 @@ app.post("/upload", async (req, res) => {
     inputFormat: question.QuestionInputFormat,
     outputFormat: question.QuestionOutputFormat,
     testInput01: question.QuestionTestInput01,
-    testOutput01: question.QuestionTestOuput01,
+    testOutput01: question.QuestionTestOutput01,
     testInput02: question.QuestionTestInput02,
-    testOutput02: question.QuestionTestOuput02,
+    testOutput02: question.QuestionTestOutput02,
     testInput03: question.QuestionTestInput03,
-    testOutput03: question.QuestionTestOuput03,
+    testOutput03: question.QuestionTestOutput03,
     status: "submission.Status",
     status01: "submission.Status01",
     status02: "submission.Status02",
@@ -285,6 +285,7 @@ app.post("/upload", async (req, res) => {
   myHeaders.append("Content-Type", "application/json");
 
   const question = await Questions.findOne({ QuestionId: questionID });
+  console.log(question);
 
   if (!question) {
     return res.status(404).json({ error: "Question not found" });
