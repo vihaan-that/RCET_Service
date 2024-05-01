@@ -232,7 +232,7 @@ app.post("/upload", async (req, res) => {
  // const question = await Questions.findOne({id:'660dc17cf8ba68be2e25373e'}); // why are you using a static id ?
     // fetching dynamic question
     const question = await Questions.findOne({ QuestionId: questionID });
-  const submission = await Submissions.find(
+  const submission = await Submissions.findOne(
     { QuestionID: questionID, UserID: userID },
     {}
   );
@@ -316,33 +316,39 @@ app.post("/upload", async (req, res) => {
   //   console.log(inputArray[looperValue]);
   //   console.log(outputArray[looperValue]);  
   // }
-  const question = await Questions.findOne({ QuestionId: questionID });
+// replacing fetch code with updateCode usage
+//   const question = await Questions.findOne({ QuestionId: questionID });
 
-// Check if question exists and has test input/output fields
-if (!question) {
-  return res.status(404).json({ error: "Question not found" });
-} else if (
-  !question.QuestionTestInput01 ||
-  !question.QuestionTestInput02 ||
-  !question.QuestionTestInput03 ||
-  !question.QuestionTestOutput01 ||
-  !question.QuestionTestOutput02 ||
-  !question.QuestionTestOutput03
-) {
-  return res.status(404).json({ error: "Question data is incomplete" });
-}
+// // Check if question exists and has test input/output fields
+// if (!question) {
+//   return res.status(404).json({ error: "Question not found" });
+// } else if (
+//   !question.QuestionTestInput01 ||
+//   !question.QuestionTestInput02 ||
+//   !question.QuestionTestInput03 ||
+//   !question.QuestionTestOutput01 ||
+//   !question.QuestionTestOutput02 ||
+//   !question.QuestionTestOutput03
+// ) {
+//   return res.status(404).json({ error: "Question data is incomplete" });
+// }
 
 // Populate input and output arrays
 const inputArray = [
-  question.QuestionTestInput01,
-  question.QuestionTestInput02,
-  question.QuestionTestInput03,
+  updatedData.testInput01,
+  updatedData.testInput02,
+  updatedData.testInput03,
 ];
 const outputArray = [
-  question.QuestionTestOutput01,
-  question.QuestionTestOutput02,
-  question.QuestionTestOutput03,
+  updatedData.testOutput01,
+  updatedData.testOutput02,
+  updatedData.testOutput03,
 ];
+for(let looper =0;looper<3;looper++){
+  console.log("The value of inputArray[looper] and outputArray[looper] is:\n");
+  console.log(inputArray[looper]);
+  console.log(outputArray[looper]);
+}
 
   const resultArray = [];
   let compStatus = "RUNNING";
@@ -376,9 +382,10 @@ const outputArray = [
         requestOptions
       );
       const result = await response.json();
+      console.log(result);
 
       if (result.compile.code !== 1) {
-        if (result.stdout === outputArray[i]) resultArray.push("YES");
+        if (result.run.stdout === outputArray[i]) resultArray.push("YES");
         
         else resultArray.push("NO");
       } else {
@@ -386,8 +393,8 @@ const outputArray = [
         resultArray.push("NO");
       }
       console.log("The values of result.stdout and outputArray[i] are:\n");
-      console.log(toString(result.stdout));
-        console.log(toString(outputArray[i]));
+      console.log(JSON.stringify(result.run.stdout));
+        console.log(JSON.stringify(outputArray[i]));
     } catch (error) {
       console.error(error);
     }
