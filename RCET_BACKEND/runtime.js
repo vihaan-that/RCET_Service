@@ -20,6 +20,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 mongoose.connect(mongoURI, {});
 const db = mongoose.connection;
+
 const questionSchema = new mongoose.Schema({
   text: String,
   difficulty: String,
@@ -37,12 +38,15 @@ const questionSchema = new mongoose.Schema({
   runMemoryLimit: String,
   runTimeout: Number,
 });
+
 const submissionSchema = new mongoose.Schema({
   QuestionID: String,
   SubmissionID: String,
   UserID: String,
   ContestID: String,
   CompileStatus: String,
+  // What do these Status{X} represent ?
+
   Status01: String,
   Status02: String,
   Status03: String,
@@ -52,12 +56,14 @@ const submissionSchema = new mongoose.Schema({
 
 const Submissions = mongoose.model("Submissions", submissionSchema);
 
-const Questions = mongoose.model("Questions", questionSchema);
+const Questions = mongoose.model("bhargav_question", questionSchema);
+
 app.use(
   cors({
     origin: "http://127.0.0.1:5500",
   })
 );
+
 const data = {
   questionTitle: "Sample Question Title",
   questionText: "This is a sample question text.",
@@ -74,6 +80,7 @@ const data = {
   status02: "Not Accepted",
   status03: "Not Accepted",
 };
+
 db.on("connected", () => {
   console.log("Connected to MongoDB");
 });
@@ -85,9 +92,10 @@ db.on("error", (err) => {
 db.on("disconnected", () => {
   console.log("Disconnected from MongoDB");
 });
+
 const sampleData = {
   questionTitle: "Sample Question Title",
-  questionText: "This is a sample question text.",
+  questionText: "This is a sample sample text.",
   inputFormat: "Sample input format.",
   outputFormat: "Sample output format.",
   testInput01: "Sample test input 1",
@@ -103,17 +111,22 @@ const sampleData = {
 };
 
 app.get("/", (req, res) => {
-  res.render("RCET_home", data);
+  res.render("RCET_home", sampleData);
 });
 
+
+// Takes preliminary info and submits the solution ?
 app.get("/RCET/practice/:questionID/:userID/:contestID", async (req, res) => {
   const questionId = req.params.questionID;
   const userID = req.params.userID;
   const contestID = req.params.contestID;
 
-  try {
-    //const question = await Questions.findOne({ QuestionId: 189});
-   const question = await Questions.findOne({id:'660dc17cf8ba68be2e25373e'});
+   try {
+      //const question = await Questions.findOne({ QuestionId: 189});
+
+   // const question = await Questions.findOne({id:'660dc17cf8ba68be2e25373e'}); // why are you using a static id ?
+      // fetching dynamic question
+      const question = await Questions.findOne({ QuestionId: questionId });
     const submission = await Submissions.find(
       { QuestionID: questionId, UserID: userID },
       {}
@@ -122,13 +135,15 @@ app.get("/RCET/practice/:questionID/:userID/:contestID", async (req, res) => {
     if (!question) {
       return res.status(404).json({ error: "Question not found" });
     }
+
     console.log(question);
     console.log(questionId);
 
     // Create a copy of the sample data object and update its fields with fetched details
+    let updatedData;
 
     if (!submission) {
-      var updatedData = {
+       updatedData = {
         ...sampleData,
         questionTitle: question.Question_title,
         questionText: question.text,
@@ -142,24 +157,26 @@ app.get("/RCET/practice/:questionID/:userID/:contestID", async (req, res) => {
         testOutput03: question.testOutput03,
       };
     }
-    var updatedData = {
-      ...sampleData,
+
+    else {
+     updatedData = {
+       status: "Yet to Solve",
       questionTitle: question.Question_title,
       questionText: question.text,
-      inputFormat: question.Question_input_Format,
-      outputFormat: question.Question_output_format,
-      testInput01: question.testInput01,
-      testOutput01: question.testOutput01,
-      testInput02: question.testInput02,
-      testOutput02: question.testOutput02,
-      testInput03: question.testInput03,
-      testOutput03: question.testOutput03,
-      status: submission[0].status,
-      status01: submission[0].status01,
-      status02: submission[0].status02,
-      status03: submission[0].status03,
-    };
-
+      inputFormat: question.QuestionInputFormat,
+      outputFormat: question.QuestionOutputFormat,
+      testInput01: question.QuestionTestInput01,
+      testOutput01: question.QuestionTestOutput01,
+      testInput02: question.QuestionTestInput02,
+      testOutput02: question.QuestionTestOutput02,
+      testInput03: question.QuestionTestInput03,
+      testOutput03: question.QuestionTestOutput03,
+      status: "none",
+      status01: "none",
+      status02: "none",
+      status03: "none",
+     };
+    }
     // Render the page with updated data
     res.render("RCET_home", updatedData);
   } catch (error) {
@@ -183,7 +200,9 @@ const sampleSubmission = {
   Status: "NOT ACCEPTED",
   userSubmittedCode: "",
 };
+
 var userCode;
+
 function generateString(questionID, userID, timestamp) {
   // Example of generating a string based on the parameters
   return `String based on questionID: ${questionID}, userID: ${userID}, and timestamp: ${timestamp}`;
@@ -203,7 +222,7 @@ app.post("/upload", async (req, res) => {
   const questionData = req.body.updatedData;
   myHeaders.append("Content-Type", "application/json");
 
-  const question = await Questions.findOne({ Question_id: questionId });
+  const question = await Questions.findOne({ QuestionId: questionID });
 
   if (!question) {
     return res.status(404).json({ error: "Question not found" });
@@ -247,25 +266,23 @@ app.post("/upload", async (req, res) => {
 
     try {
       const response = await fetch(
-        "http://127.0.0.1:2000/api/v2/execute",
+        "https://emkc.org/api/v2/piston/execute",
         requestOptions
       );
       const result = await response.json();
 
       if (result.compile.code !== 1) {
-        if (result.stdout === outputArray[i]) {
-          resultArray.push("YES");
-        } else {
-          resultArray.push("NO");
-        }
+        if (result.stdout === outputArray[i]) resultArray.push("YES");
+        else resultArray.push("NO");
       } else {
-        compStatus = "FAILED";
+        let compStatus = "FAILED";
         resultArray.push("NO");
       }
     } catch (error) {
       console.error(error);
     }
   }
+
   const timestamp = new Date().toISOString();
 
   const submissionDeets = {
@@ -279,13 +296,12 @@ app.post("/upload", async (req, res) => {
     Status02: resultArray[1],
     Status03: resultArray[2],
     Status:
-      resultArray[0] === "YES" &&
+      (resultArray[0] === "YES" &&
       resultArray[1] === "YES" &&
-      resultArray[2] === "YES"
-        ? "ACCEPTED"
-        : "NOT ACCEPTED",
+      resultArray[2] === "YES") ? "ACCEPTED" : "NOT ACCEPTED",
     userSubmittedCode: Val,
   };
+
   const pageData = {
     ...updatedData,
     Status01: resultArray[0],
@@ -297,7 +313,7 @@ app.post("/upload", async (req, res) => {
   res.render("RCET_home", pageData);
 });
 
-// Start the server
+// starts server
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
 });
