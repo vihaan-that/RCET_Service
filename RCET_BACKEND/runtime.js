@@ -135,8 +135,9 @@ app.get("/RCET/practice/:questionID/:userID/:contestID", async (req, res) => {
     if (!question) {
       return res.status(404).json({ error: "Question not found" });
     }
-
+    console.log("Question object Fetched is:\n");
     console.log(question);
+    console.log("Question ID is:\n ");
     console.log(questionId);
 
     // Create a copy of the sample data object and update its fields with fetched details
@@ -159,6 +160,7 @@ app.get("/RCET/practice/:questionID/:userID/:contestID", async (req, res) => {
     }
 
     else {
+      console.log("Type of Question Title is:\n");
       console.log(typeof(question.QuestionTitle));
      updatedData = {
       questionTitle: question.QuestionTitle,
@@ -176,6 +178,7 @@ app.get("/RCET/practice/:questionID/:userID/:contestID", async (req, res) => {
       status02: submission.Status02,
       status03: submission.Status03,
      };
+     console.log("The value of Updated Data is\n");
      console.log(updatedData);
     }
     // Render the page with updated data
@@ -216,6 +219,7 @@ app.post("/upload", async (req, res) => {
   const Val = req.body.code; // Parse the request body
   const questionID = req.body.questionID;
   const userID = req.body.userID;
+  console.log("The value of req.body.code at upload route is:\n");
   console.log(Val);
   console.log(typeof Val);
   userCode = Val;
@@ -233,17 +237,17 @@ app.post("/upload", async (req, res) => {
     {}
   );
 
-  if (!question) {
+  if (!question&&typeof(question)=="undefined") {
     return res.status(404).json({ error: "Question not found" });
   }
-
+  console.log("Question object Fetched is:\n");
   console.log(question);
   console.log(questionID);
 
   // Create a copy of the sample data object and update its fields with fetched details
   
 
-  if (!submission) {
+  if (!submission||submission==undefined) {
       CheckedFlag = false;
      updatedData = {
       ...sampleData,
@@ -274,33 +278,72 @@ app.post("/upload", async (req, res) => {
     testOutput02: question.QuestionTestOutput02,
     testInput03: question.QuestionTestInput03,
     testOutput03: question.QuestionTestOutput03,
-    status: "submission.Status",
-    status01: "submission.Status01",
-    status02: "submission.Status02",
-    status03: "submission.Status03",
+    status: submission.Status,
+    status01: submission.Status01,
+    status02: submission.Status02,
+    status03: submission.Status03,
    };
+   console.log("The value of Updated Data at upload route is\n");
    console.log(updatedData);
   }
 } catch (error) {console.error("Error:", error);}
   myHeaders.append("Content-Type", "application/json");
 
+  // const question = await Questions.findOne({ QuestionId: questionID });
+  // console.log("The question fetched at upload route is:\n");
+  // console.log(question);
+  
+  
+
+  // if (!question) {
+  //   return res.status(404).json({ error: "Question not found" });
+  // }
+
+  // const inputArray = [
+  //   question.testInput01,
+  //   question.testInput02,
+  //   question.testInput03,
+  // ]; // Square brackets for array declaration
+
+  // const outputArray = [
+  //   question.testOutput01,
+  //   question.testOutput02,
+  //   question.testOutput03,
+  // ]; // Square brackets for array declaration
+  // //testing to debug
+  // for(let looperValue = 0;looperValue<3;looperValue++){
+  //   console.log("The value of inputArray[looperValue] and outputArray[looperValue] is:\n");
+  //   console.log(inputArray[looperValue]);
+  //   console.log(outputArray[looperValue]);  
+  // }
   const question = await Questions.findOne({ QuestionId: questionID });
-  console.log(question);
 
-  if (!question) {
-    return res.status(404).json({ error: "Question not found" });
-  }
+// Check if question exists and has test input/output fields
+if (!question) {
+  return res.status(404).json({ error: "Question not found" });
+} else if (
+  !question.testInput01 ||
+  !question.testInput02 ||
+  !question.testInput03 ||
+  !question.testOutput01 ||
+  !question.testOutput02 ||
+  !question.testOutput03
+) {
+  return res.status(404).json({ error: "Question data is incomplete" });
+}
 
-  const inputArray = [
-    question.testInput01,
-    question.testInput02,
-    question.testInput03,
-  ]; // Square brackets for array declaration
-  const outputArray = [
-    question.testOutput01,
-    question.testOutput02,
-    question.testOutput03,
-  ]; // Square brackets for array declaration
+// Populate input and output arrays
+const inputArray = [
+  question.testInput01,
+  question.testInput02,
+  question.testInput03,
+];
+const outputArray = [
+  question.testOutput01,
+  question.testOutput02,
+  question.testOutput03,
+];
+
   const resultArray = [];
   let compStatus = "RUNNING";
   for (let i = 0; i < 3; i++) {
@@ -342,6 +385,7 @@ app.post("/upload", async (req, res) => {
          compStatus = "FAILED";
         resultArray.push("NO");
       }
+      console.log("The values of result.stdout and outputArray[i] are:\n");
       console.log(toString(result.stdout));
         console.log(toString(outputArray[i]));
     } catch (error) {
