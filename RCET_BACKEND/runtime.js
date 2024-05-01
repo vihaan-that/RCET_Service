@@ -146,16 +146,16 @@ app.get("/RCET/practice/:questionID/:userID/:contestID", async (req, res) => {
     if (!submission) {
        updatedData = {
         ...sampleData,
-        questionTitle: question.Question_title,
+        questionTitle: question.QuestionTitle,
         questionText: question.text,
-        inputFormat: question.Question_input_Format,
-        outputFormat: question.Question_output_format,
-        testInput01: question.testInput01,
-        testOutput01: question.testOutput01,
-        testInput02: question.testInput02,
-        testOutput02: question.testOutput02,
-        testInput03: question.testInput03,
-        testOutput03: question.testOutput03,
+        inputFormat: question.QuestionInputFormat,
+        outputFormat: question.QuestionOutputFormat,
+        testInput01: question.QuestionTestInput01,
+        testOutput01: question.QuestionTestOutput01,
+        testInput02: question.QuestionTestInput02,
+        testOutput02: question.QuestionTestOutput02,
+        testInput03: question.QuestionTestInput03,
+        testOutput03: question.QuestionTestOutput03,
       };
     }
 
@@ -209,7 +209,7 @@ var userCode;
 
 function generateString(questionID, userID, timestamp) {
   // Example of generating a string based on the parameters
-  return `String based on questionID: ${questionID}, userID: ${userID}, and timestamp: ${timestamp}`;
+  return `${questionID}-${userID}-${timestamp}`;
 }
 
 // Usage:
@@ -249,18 +249,18 @@ app.post("/upload", async (req, res) => {
 
   if (!submission||submission==undefined) {
       CheckedFlag = false;
-     updatedData = {
+     updatedData = {  
       ...sampleData,
-      questionTitle: question.Question_title,
+      questionTitle: question.QuestionTitle,
       questionText: question.text,
-      inputFormat: question.Question_input_Format,
-      outputFormat: question.Question_output_format,
-      testInput01: question.testInput01,
-      testOutput01: question.testOutput01,
-      testInput02: question.testInput02,
-      testOutput02: question.testOutput02,
-      testInput03: question.testInput03,
-      testOutput03: question.testOutput03,
+      inputFormat: question.QuestionInputFormat,
+      outputFormat: question.QuestionOutputFormat,
+      testInput01: question.QuestionTestInput01,
+      testOutput01: question.QuestionTestOutput01,
+      testInput02: question.QuestionTestInput02,
+      testOutput02: question.QuestionTestOutput02,
+      testInput03: question.QuestionTestInput03,
+      testOutput03: question.QuestionTestOutput03,
     };
   }
 
@@ -322,26 +322,26 @@ app.post("/upload", async (req, res) => {
 if (!question) {
   return res.status(404).json({ error: "Question not found" });
 } else if (
-  !question.testInput01 ||
-  !question.testInput02 ||
-  !question.testInput03 ||
-  !question.testOutput01 ||
-  !question.testOutput02 ||
-  !question.testOutput03
+  !question.QuestionTestInput01 ||
+  !question.QuestionTestInput02 ||
+  !question.QuestionTestInput03 ||
+  !question.QuestionTestOutput01 ||
+  !question.QuestionTestOutput02 ||
+  !question.QuestionTestOutput03
 ) {
   return res.status(404).json({ error: "Question data is incomplete" });
 }
 
 // Populate input and output arrays
 const inputArray = [
-  question.testInput01,
-  question.testInput02,
-  question.testInput03,
+  question.QuestionTestInput01,
+  question.QuestionTestInput02,
+  question.QuestionTestInput03,
 ];
 const outputArray = [
-  question.testOutput01,
-  question.testOutput02,
-  question.testOutput03,
+  question.QuestionTestOutput01,
+  question.QuestionTestOutput02,
+  question.QuestionTestOutput03,
 ];
 
   const resultArray = [];
