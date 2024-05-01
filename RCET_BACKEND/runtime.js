@@ -13,7 +13,7 @@ const fetch = require("node-fetch");
 
 const app = express();
 const PORT = 3000;
-
+app.set('view cache', false);
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 app.use(express.static(path.join(__dirname, "public")));
@@ -31,9 +31,9 @@ const questionSchema = new mongoose.Schema({
   QuestionTestInput01: String,
   QuestionTestInput02: String,
   QuestionTestInput03: String,
-  QuestionTestOutput01: String,
-  QuestionTestOutput02: String,
-  QuestionTestOutput03: String,
+  QuestionTestOuput01: String,
+  QuestionTestOuput02: String,
+  QuestionTestOuput03: String,
   QuestionTitle: String,
   runMemoryLimit: String,
   runTimeout: Number,
@@ -159,23 +159,24 @@ app.get("/RCET/practice/:questionID/:userID/:contestID", async (req, res) => {
     }
 
     else {
+      console.log(typeof(question.QuestionTitle));
      updatedData = {
-       status: "Yet to Solve",
-      questionTitle: question.Question_title,
+      questionTitle: question.QuestionTitle,
       questionText: question.text,
       inputFormat: question.QuestionInputFormat,
       outputFormat: question.QuestionOutputFormat,
       testInput01: question.QuestionTestInput01,
-      testOutput01: question.QuestionTestOutput01,
+      testOutput01: question.QuestionTestOuput01,
       testInput02: question.QuestionTestInput02,
-      testOutput02: question.QuestionTestOutput02,
+      testOutput02: question.QuestionTestOuput02,
       testInput03: question.QuestionTestInput03,
-      testOutput03: question.QuestionTestOutput03,
-      status: "none",
-      status01: "none",
-      status02: "none",
-      status03: "none",
+      testOutput03: question.QuestionTestOuput03,
+      status: submission.Status,
+      status01: submission.Status01,
+      status02: submission.Status02,
+      status03: submission.Status03,
      };
+     console.log(updatedData);
     }
     // Render the page with updated data
     res.render("RCET_home", updatedData);
@@ -219,7 +220,67 @@ app.post("/upload", async (req, res) => {
   console.log(typeof Val);
   userCode = Val;
   const myHeaders = new Headers();
-  const questionData = req.body.updatedData;
+  let CheckedFlag = true;
+  try {
+    //const question = await Questions.findOne({ QuestionId: 189});
+
+ // const question = await Questions.findOne({id:'660dc17cf8ba68be2e25373e'}); // why are you using a static id ?
+    // fetching dynamic question
+    const question = await Questions.findOne({ QuestionId: questionId });
+  const submission = await Submissions.find(
+    { QuestionID: questionId, UserID: userID },
+    {}
+  );
+
+  if (!question) {
+    return res.status(404).json({ error: "Question not found" });
+  }
+
+  console.log(question);
+  console.log(questionId);
+
+  // Create a copy of the sample data object and update its fields with fetched details
+  let updatedData;
+
+  if (!submission) {
+      CheckedFlag = false;
+     updatedData = {
+      ...sampleData,
+      questionTitle: question.Question_title,
+      questionText: question.text,
+      inputFormat: question.Question_input_Format,
+      outputFormat: question.Question_output_format,
+      testInput01: question.testInput01,
+      testOutput01: question.testOutput01,
+      testInput02: question.testInput02,
+      testOutput02: question.testOutput02,
+      testInput03: question.testInput03,
+      testOutput03: question.testOutput03,
+    };
+  }
+
+  else {
+    console.log(typeof(question.QuestionTitle));
+   updatedData = {
+     status: "Yet to Solve",
+    questionTitle: question.QuestionTitle,
+    questionText: question.text,
+    inputFormat: question.QuestionInputFormat,
+    outputFormat: question.QuestionOutputFormat,
+    testInput01: question.QuestionTestInput01,
+    testOutput01: question.QuestionTestOuput01,
+    testInput02: question.QuestionTestInput02,
+    testOutput02: question.QuestionTestOuput02,
+    testInput03: question.QuestionTestInput03,
+    testOutput03: question.QuestionTestOuput03,
+    status: "submission.Status",
+    status01: "submission.Status01",
+    status02: "submission.Status02",
+    status03: "submission.Status03",
+   };
+   console.log(updatedData);
+  }
+} catch (error) {console.error("Error:", error);}
   myHeaders.append("Content-Type", "application/json");
 
   const question = await Questions.findOne({ QuestionId: questionID });
@@ -239,7 +300,7 @@ app.post("/upload", async (req, res) => {
     question.testOutput03,
   ]; // Square brackets for array declaration
   const resultArray = [];
-  const compStatus = "RUNNING";
+  let compStatus = "RUNNING";
   for (let i = 0; i < 3; i++) {
     const raw = JSON.stringify({
       language: "c++",
@@ -275,7 +336,7 @@ app.post("/upload", async (req, res) => {
         if (result.stdout === outputArray[i]) resultArray.push("YES");
         else resultArray.push("NO");
       } else {
-        let compStatus = "FAILED";
+         compStatus = "FAILED";
         resultArray.push("NO");
       }
     } catch (error) {
@@ -290,7 +351,7 @@ app.post("/upload", async (req, res) => {
     QuestionID: questionID,
     SubmissionID: generateString(questionID, userID, timestamp),
     UserID: userID,
-    ContestID: contestID,
+    ContestID: "000",
     CompileStatus: compStatus,
     Status01: resultArray[0],
     Status02: resultArray[1],
@@ -301,6 +362,18 @@ app.post("/upload", async (req, res) => {
       resultArray[2] === "YES") ? "ACCEPTED" : "NOT ACCEPTED",
     userSubmittedCode: Val,
   };
+    try {
+    const newSubmission = new Submissions(submissionDeets);
+    const savedSubmission = await newSubmission.save();
+    } catch(error){
+      console.error('Error saving submission at line 268:', error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+
+  
+  
+
+
 
   const pageData = {
     ...updatedData,

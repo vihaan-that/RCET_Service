@@ -45,7 +45,8 @@ executeCodeBtn.addEventListener('click', async () => {
 }
 const escapedString = escapeString(userCode);
 console.log('Escaped string:', escapedString);
-const codeJson = {"code":userCode};
+const codeJson = {"code":userCode, "questionID":"919", "userID":"0"};
+console.log(codeJson);
 const myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 const requestOptions = {
