@@ -58,7 +58,7 @@ const requestOptions = {
 
 fetch("http://localhost:3000/upload", requestOptions)
   .then((response) => response.text())
-  .then((result) => console.log(result))
+  .then((result) => document.getElementById('editorConsole').innerHTML = result)
   .catch((error) => console.error(error));
 
 }

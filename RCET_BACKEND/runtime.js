@@ -433,13 +433,15 @@ for(let looper =0;looper<3;looper++){
 
   const pageData = {
     ...updatedData,
-    Status01: resultArray[0],
-    Status02: resultArray[1],
-    Status03: resultArray[2],
-    Status: compStatus,
+    status01: resultArray[0],
+    status02: resultArray[1],
+    status03: resultArray[2],
+    status: compStatus,
   };
-
-  res.render("RCET_home", pageData);
+  console.log("Page Data Details Before Submission are:\n");
+  console.log(pageData);
+  statusValues = {status: pageData.status, status01: pageData.status01, status02: pageData.status02, status03: pageData.status03};
+  res.render("console", statusValues);
 });
 
 // starts server
