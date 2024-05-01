@@ -53,12 +53,13 @@ const requestOptions = {
   method: "POST",
   headers: myHeaders,
   body: JSON.stringify(codeJson),
-  redirect: "follow"
+  
 };
 
 fetch("http://localhost:3000/upload", requestOptions)
   .then((response) => response.text())
   .then((result) => document.getElementById('editorConsole').innerHTML = result)
+  .then((result) => console.log(result))
   .catch((error) => console.error(error));
 
 }

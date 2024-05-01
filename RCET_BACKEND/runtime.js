@@ -1,4 +1,5 @@
 const express = require("express");
+const ejs = require("ejs");
 const fs = require("fs");
 const { exec } = require("child_process");
 const { stringify } = require("querystring");
@@ -127,10 +128,12 @@ app.get("/RCET/practice/:questionID/:userID/:contestID", async (req, res) => {
    // const question = await Questions.findOne({id:'660dc17cf8ba68be2e25373e'}); // why are you using a static id ?
       // fetching dynamic question
       const question = await Questions.findOne({ QuestionId: questionId });
-    const submission = await Submissions.find(
-      { QuestionID: questionId, UserID: userID },
-      {}
+    const submission = await Submissions.findOne(
+      { QuestionID: questionId, UserID: userID,  Status: "ACCEPTED" }
+      
     );
+    console.log("The value of submission is:\n");
+    console.log(submission);
 
     if (!question) {
       return res.status(404).json({ error: "Question not found" });
@@ -144,6 +147,7 @@ app.get("/RCET/practice/:questionID/:userID/:contestID", async (req, res) => {
     let updatedData;
 
     if (!submission) {
+      console.log("entered not submission");
        updatedData = {
         ...sampleData,
         questionTitle: question.QuestionTitle,
@@ -233,7 +237,7 @@ app.post("/upload", async (req, res) => {
     // fetching dynamic question
     const question = await Questions.findOne({ QuestionId: questionID });
   const submission = await Submissions.findOne(
-    { QuestionID: questionID, UserID: userID },
+    { QuestionID: questionID, UserID: userID},
     {}
   );
 
@@ -441,7 +445,11 @@ for(let looper =0;looper<3;looper++){
   console.log("Page Data Details Before Submission are:\n");
   console.log(pageData);
   statusValues = {status: pageData.status, status01: pageData.status01, status02: pageData.status02, status03: pageData.status03};
-  res.render("console", statusValues);
+  const consoleTemplate = fs.readFileSync("./views/console.ejs", "utf-8");
+  const updatedconsoleView = ejs.compile(consoleTemplate);
+  const updatedConsoleHTML = updatedconsoleView(statusValues);
+  res.send(updatedConsoleHTML);
+
 });
 
 // starts server
