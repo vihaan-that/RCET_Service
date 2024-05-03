@@ -132,33 +132,22 @@ app.post("/upload", async (req, res) => {
       if (!question)
          return res.status(404).json({ error: "Question not found" });
 
-      updatedData = {
-         questionTitle: question.QuestionTitle,
-         questionText: question.text,
-         inputFormat: question.QuestionInputFormat,
-         outputFormat: question.QuestionOutputFormat,
-         testInput01: question.QuestionTestInput01,
-         testOutput01: question.QuestionTestOutput01,
-         testInput02: question.QuestionTestInput02,
-         testOutput02: question.QuestionTestOutput02,
-         testInput03: question.QuestionTestInput03,
-         testOutput03: question.QuestionTestOutput03,
-      };
+      updatedData = { ...question['_doc'] };
 
    } catch (error) {
       console.error("Error:", error);
    }
 
    const inputArray = [
-      updatedData.testInput01,
-      updatedData.testInput02,
-      updatedData.testInput03,
+      updatedData.QuestionTestInput01,
+      updatedData.QuestionTestInput02,
+      updatedData.QuestionTestInput03,
    ];
 
    const outputArray = [
-      updatedData.testOutput01,
-      updatedData.testOutput02,
-      updatedData.testOutput03,
+      updatedData.QuestionTestOutput01,
+      updatedData.QuestionTestOutput02,
+      updatedData.QuestionTestOutput03,
    ];
 
 
