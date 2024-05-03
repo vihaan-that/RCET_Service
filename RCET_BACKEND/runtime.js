@@ -133,7 +133,7 @@ app.post("/upload", async (req, res) => {
          return res.status(404).json({ error: "Question not found" });
 
       updatedData = { ...question['_doc'] };
-
+      console.log(updatedData);
    } catch (error) {
       console.error("Error:", error);
    }
