@@ -1,15 +1,7 @@
-
-
 const executeCodeBtn = document.querySelector('.editor__run');
 const submitCodeBtn = document.querySelector('.editor__submit');
 //Editor Initialising 
 let codeEditor = ace.edit(codeEditorWindow);
-userData = {
-  "username": "exampleUser",
-  "time": "2024-04-11T10:00:00Z",
-  "questionID": "12345"
-}
-
 
 let editorLibrary = {
   init() {
@@ -45,21 +37,28 @@ executeCodeBtn.addEventListener('click', async () => {
 }
 const escapedString = escapeString(userCode);
 console.log('Escaped string:', escapedString);
-const codeJson = {"code":userCode};
-const myHeaders = new Headers();
-myHeaders.append("Content-Type", "application/json");
+let url = window.location.href;
+url = (new URL(url)).pathname.split('/');
+
+
 const requestOptions = {
   method: "POST",
-  headers: myHeaders,
-  body: JSON.stringify(codeJson),
-  redirect: "follow"
+  headers: {
+    "content-type": "application/json"
+  },
+  body: JSON.stringify({
+    code: userCode,
+    questionID: url[3],
+    userID: url[4],
+    contestID: url[5],
+  }),
 };
 
 fetch("http://localhost:3000/upload", requestOptions)
   .then((response) => response.text())
+  .then((result) => document.getElementById('editorConsole').innerHTML = result)
   .then((result) => console.log(result))
   .catch((error) => console.error(error));
-
 }
 );
 

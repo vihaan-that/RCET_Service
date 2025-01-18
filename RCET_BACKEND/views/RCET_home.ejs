@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CodeRealms RCET</title>
-    <link rel="stylesheet" href="/RCET_styles/RCET_styles.css"
+    <link rel="stylesheet" href="/RCET_styles/RCET_styles.css">
   </head>
   <body>
     <!-- This div represents the Question section, it has 2 segments -->
@@ -46,8 +46,8 @@
         <p>------------------------------EOF------------------------------</p>
       </div>
     </div>
-    <!-- This Div is where the RCET Engine is housed, outer div is a decoration -->
-    <div class="card">
+     <!-- This Div is where the RCET Engine is housed, outer div is a decoration -->
+     <div class="card">
       <div class="cardHeader">
         <div class="cardTitle">$Code-Realms</div>
 
@@ -61,37 +61,38 @@
       <div class="editor">
         <div class="editor__wrapper">
             <!-- This is the IDE Block -->
-          <div class="editor__body">
-            <div id="codeEditorWindow" class="editor__code"></div>
-          </div>
-          <!-- This houses the footer block -->
-          <div class="editor__footer">
-            <div class="editor__footer--left">
-              <button class="editor__btn editor__run">RUN</button>
-              <button class="editor__btn editor__submit">SUBMIT</button>
+            <div class="editor__body">
+              <div id="codeEditorWindow" class="editor__code"></div>
             </div>
-            <div class="editor__footer--right">
-              <div class="editor__console">
-                <ul> <li><p><strong>Compilation_status: </strong><%=status%></p></li>
-                  <li><p><strong>TestCase-1: </strong><%=status01%></p></li>
-                  <li><p><strong>TestCase-2: </strong><%=status02%></p></li>
-                  <li><p><strong>TestCase-3: </strong><%=status03%></p></li></ul>
+            <!-- This houses the footer block -->
+            <div class="editor__footer" id="editorConsole">
+              <div class="editor__footer--left">
+                <button class="editor__btn editor__run">RUN</button>
+                <button class="editor__btn editor__submit">SUBMIT</button>
               </div>
-              <ul class="editor__console-logs">
-              </ul>
+              <div class="editor__footer--right">
+                <div class="editor__console">
+                  <ul> <li><p><strong>Compilation_status: </strong><%=status%></p></li>
+                    <li><p><strong>TestCase-1: </strong><%=status01%></p></li>
+                    <li><p><strong>TestCase-2: </strong><%=status02%></p></li>
+                    <li><p><strong>TestCase-3: </strong><%=status03%></p></li></ul>
+                </div>
+                <ul class="editor__console-logs">
+                </ul>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- ACE_EDITOR essential scripts -->
-    <script src="/RCET_scripts/ace-builds-master/src-min/ace.js"></script>
-    <script
-      class="languages"
-      src="/RCET_scripts/ace-builds-master/src-min/mode-c_cpp.js"
-    ></script>
-    <script src="/RCET_scripts/ace-builds-master/src-min/ext-language_tools.js"></script>
-    <!-- Custom scripts are housed below -->
-    <script src="/RCET_scripts/RCET_scripts.js"></script>
-  </body>
-</html>
+      <!-- ACE_EDITOR essential scripts -->
+      <script src="/RCET_scripts/ace-builds-master/src-min/ace.js"></script>
+      <script
+        class="languages"
+        src="/RCET_scripts/ace-builds-master/src-min/mode-c_cpp.js"
+      ></script>
+      <script src="/RCET_scripts/ace-builds-master/src-min/ext-language_tools.js"></script>
+      <!-- Custom scripts are housed below -->
+      <script src="/RCET_scripts/RCET_scripts.js"></script>
+    </body>
+  </html>
+  
